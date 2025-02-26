@@ -99,6 +99,10 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    fetchAspirations();
+  }, []);
+
+  useEffect(() => {
     const timer = setInterval(() => {
       const newTimeLeft = calculateTimeLeft();
       setTimeLeft(newTimeLeft);
@@ -129,11 +133,6 @@ const Home = () => {
       return () => clearInterval(fireworkInterval);
     }
   }, [isEventStarted, createFireworks]);
-
-  // 테스트용: 이벤트 상태 토글 버튼 (개발 중에만 사용하고 나중에 제거)
-  const toggleEventStarted = () => {
-    setIsEventStarted((prev) => !prev);
-  };
 
   const handleSubmit = async () => {
     if (inputText.trim() === "") return;
@@ -178,14 +177,6 @@ const Home = () => {
         <p className="text-lg sm:text-xl md:text-2xl mb-8">
           2025년 2월 28일 시작됩니다!
         </p>
-
-        {/* 테스트 버튼 - 개발 후 제거 */}
-        <button
-          onClick={toggleEventStarted}
-          className="absolute top-4 right-4 bg-gray-800/50 px-4 py-2 rounded text-sm"
-        >
-          {isEventStarted ? "카운트다운 표시" : "이벤트 시작 표시"}
-        </button>
 
         {/* 카운트다운 타이머 또는 Let's Go 화면 */}
         {isEventStarted ? (
@@ -604,7 +595,7 @@ const Home = () => {
             htmlFor="aspirations"
             className="block text-lg font-semibold mb-3 text-blue-100 tracking-wide"
           >
-            나에게 Crossfit 2025 Open은
+            Crossfit 2025 Open 각오 한마디 !
           </label>
           <div className="flex items-center gap-2">
             <div className="relative flex-grow">
@@ -619,9 +610,6 @@ const Home = () => {
                 focus:ring-blue-400 focus:bg-white transition-all duration-200
                 shadow-inner"
               />
-              <div className="absolute bottom-0 right-3 top-0 flex items-center text-gray-500">
-                이다.
-              </div>
             </div>
             <button
               className="p-5 bg-gradient-to-r from-blue-500 to-indigo-600 
@@ -691,7 +679,7 @@ const Home = () => {
                   return (
                     <span key={aspiration.id} className="inline-block mx-4">
                       <span className="text-white/80 italic">
-                        "{aspiration.text} 이다" - {formattedDate}
+                        "{aspiration.text}" - {formattedDate}
                       </span>
                     </span>
                   );
@@ -700,7 +688,7 @@ const Home = () => {
             </div>
           ) : (
             <div className="text-white/60 italic text-center">
-              아직 작성된 포부가 없습니다.
+              아직 작성된 한마디가 없습니다.
             </div>
           )}
         </div>
