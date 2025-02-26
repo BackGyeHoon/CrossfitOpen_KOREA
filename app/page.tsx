@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 
 interface TimeLeft {
   days: number;
@@ -16,8 +16,9 @@ interface Aspiration {
 }
 
 const Home = () => {
-  // 예시 이벤트 날짜 – 필요 시 이번주 금요일 날짜로 계산 로직 추가 가능
-  const eventDate = new Date("2025-02-28T00:00:00");
+  // eventDate를 useMemo로 감싸기
+  const eventDate = useMemo(() => new Date("2025-02-28T00:00:00"), []);
+
   const [isEventStarted, setIsEventStarted] = useState(false);
   const [fireworks, setFireworks] = useState<
     {
@@ -31,7 +32,7 @@ const Home = () => {
     }[]
   >([]);
 
-  const calculateTimeLeft = (): TimeLeft => {
+  const calculateTimeLeft = useCallback((): TimeLeft => {
     const now = new Date();
     const difference = eventDate.getTime() - now.getTime();
 
@@ -45,13 +46,11 @@ const Home = () => {
       minutes: Math.floor((difference / (1000 * 60)) % 60),
       seconds: Math.floor((difference / 1000) % 60),
     };
-  };
+  }, [eventDate]);
 
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
   const [inputText, setInputText] = useState("");
   const [aspirations, setAspirations] = useState<Aspiration[]>([]);
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
   const fetchAspirations = async () => {
     try {
@@ -107,7 +106,6 @@ const Home = () => {
       const newTimeLeft = calculateTimeLeft();
       setTimeLeft(newTimeLeft);
 
-      // 타이머가 모두 0이면 이벤트가 시작된 것으로 설정
       if (
         newTimeLeft.days === 0 &&
         newTimeLeft.hours === 0 &&
@@ -119,7 +117,7 @@ const Home = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [calculateTimeLeft]);
 
   // 이벤트 시작 후 폭죽 생성
   useEffect(() => {
@@ -679,7 +677,7 @@ const Home = () => {
                   return (
                     <span key={aspiration.id} className="inline-block mx-4">
                       <span className="text-white/80 italic">
-                        "{aspiration.text}" - {formattedDate}
+                        &ldquo;{aspiration.text}&rdquo; - {formattedDate}
                       </span>
                     </span>
                   );
