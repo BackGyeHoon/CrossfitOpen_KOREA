@@ -1,18 +1,14 @@
 "use client";
 
+import TextMarquee from "@/components/TextMarquee";
 import { useEffect, useState, useCallback, useMemo } from "react";
+import { Aspiration } from "@/types/aspiration";
 
 interface TimeLeft {
   days: number;
   hours: number;
   minutes: number;
   seconds: number;
-}
-
-interface Aspiration {
-  id: number;
-  text: string;
-  created_at: string;
 }
 
 const Home = () => {
@@ -636,54 +632,8 @@ const Home = () => {
 
         {/* 텍스트 흐름 애니메이션 영역 */}
         <div className="mt-8 w-full overflow-hidden bg-white/5 backdrop-blur-sm py-4 rounded-lg relative">
-          <style jsx>{`
-            @keyframes marquee {
-              0% {
-                transform: translateX(50%);
-              }
-              100% {
-                transform: translateX(-120%);
-              }
-            }
-            .marquee-container {
-              position: relative;
-              width: 100%;
-              overflow: hidden;
-            }
-            .marquee-content {
-              display: inline-block;
-              white-space: nowrap;
-              position: relative;
-              animation: marquee 15s linear infinite;
-              padding-left: 50%;
-            }
-          `}</style>
-
           {aspirations.length > 0 ? (
-            <div className="marquee-container">
-              <div className="marquee-content">
-                {aspirations.map((aspiration) => {
-                  // 날짜 형식 변환
-                  const date = new Date(aspiration.created_at);
-                  const formattedDate = `${date.getFullYear()}/${String(
-                    date.getMonth() + 1
-                  ).padStart(2, "0")}/${String(date.getDate()).padStart(
-                    2,
-                    "0"
-                  )} ${String(date.getHours()).padStart(2, "0")}:${String(
-                    date.getMinutes()
-                  ).padStart(2, "0")}`;
-
-                  return (
-                    <span key={aspiration.id} className="inline-block mx-4">
-                      <span className="text-white/80 italic">
-                        &ldquo;{aspiration.text}&rdquo; - {formattedDate}
-                      </span>
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
+            <TextMarquee aspirations={aspirations} />
           ) : (
             <div className="text-white/60 italic text-center">
               아직 작성된 한마디가 없습니다.
