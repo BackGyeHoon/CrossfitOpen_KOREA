@@ -104,16 +104,16 @@ const KrLeaderboard: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-center">
+    <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center">
         🇰🇷 CrossFit 오픈 2025 한국 선수 리더보드
       </h2>
 
       {/* 성별 선택 탭 */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-4 sm:mb-6">
         <div className="bg-gray-700 rounded-lg overflow-hidden inline-flex">
           <button
-            className={`px-6 py-2 font-medium ${
+            className={`px-4 sm:px-6 py-2 font-medium ${
               division === "1"
                 ? "bg-blue-600 text-white"
                 : "bg-gray-700 text-gray-300 hover:bg-gray-600"
@@ -123,7 +123,7 @@ const KrLeaderboard: React.FC = () => {
             남성
           </button>
           <button
-            className={`px-6 py-2 font-medium ${
+            className={`px-4 sm:px-6 py-2 font-medium ${
               division === "2"
                 ? "bg-pink-600 text-white"
                 : "bg-gray-700 text-gray-300 hover:bg-gray-600"
@@ -140,14 +140,13 @@ const KrLeaderboard: React.FC = () => {
         <p className="text-blue-300">총 한국 선수: {koreanAthletes.length}명</p>
       </div>
 
-      {/* 한국 선수 리더보드 출력 */}
-      <div className="overflow-x-auto">
+      {/* 데스크탑 뷰 - 테이블 형태 (중간 크기 이상 화면에서만 표시) */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="min-w-full bg-gray-900 rounded-lg overflow-hidden">
           <thead className="bg-gray-700">
             <tr>
               <th className="px-4 py-2 text-left">순위</th>
               <th className="px-4 py-2 text-left">이름</th>
-              <th className="px-4 py-2 text-left">국가</th>
               <th className="px-4 py-2 text-left">소속</th>
               <th className="px-4 py-2 text-left">25.1 점수</th>
             </tr>
@@ -160,13 +159,40 @@ const KrLeaderboard: React.FC = () => {
               >
                 <td className="px-4 py-2">{row.overallRank}</td>
                 <td className="px-4 py-2">{row.entrant.competitorName}</td>
-                <td className="px-4 py-2">{row.entrant.countryOfOriginName}</td>
                 <td className="px-4 py-2">{row.entrant.affiliateName}</td>
                 <td className="px-4 py-2">{row.scores[0]?.scoreDisplay}</td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* 모바일 뷰 - 카드 형태 (중간 크기 미만 화면에서만 표시) */}
+      <div className="md:hidden space-y-4">
+        {koreanAthletes.map((row) => (
+          <div
+            key={row.entrant.competitorId}
+            className="bg-gray-900 p-4 rounded-lg"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-bold text-lg">
+                {row.entrant.competitorName}
+              </span>
+              <span className="bg-gray-700 px-2 py-1 rounded-md">
+                순위: {row.overallRank}
+              </span>
+            </div>
+            <div className="text-gray-300">
+              소속: {row.entrant.affiliateName || "없음"}
+            </div>
+            <div className="mt-2 pt-2 border-t border-gray-700 flex justify-between">
+              <span>25.1 점수:</span>
+              <span className="font-medium">
+                {row.scores[0]?.scoreDisplay || "없음"}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
