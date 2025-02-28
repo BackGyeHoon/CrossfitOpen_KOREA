@@ -13,8 +13,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Crossfit 2025 Open Korea",
-  description: "Crossfit 2025 Open Korea",
+  title: "Crossfit 2025 Open Korean translation",
+  description: "Crossfit 2025 Open Korean translation",
+  openGraph: {
+    title: "CrossFit 2025 Open",
+    description: "CrossFit 2025 Open 워크아웃 정보 및 기준",
+    images: [
+      {
+        url: "/og-image.jpg", // 이미지 경로 (public 폴더 기준)
+        width: 1200,
+        height: 630,
+        alt: "CrossFit 2025 Open Korean translation",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({
