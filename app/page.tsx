@@ -4,47 +4,7 @@ import TextMarquee from "@/components/TextMarquee";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Aspiration } from "@/types/aspiration";
 
-interface TimeLeft {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
 const Home = () => {
-  // eventDate를 useMemo로 감싸기
-  const eventDate = useMemo(() => new Date("2025-02-28T00:00:00"), []);
-
-  const [isEventStarted, setIsEventStarted] = useState(false);
-  const [fireworks, setFireworks] = useState<
-    {
-      id: number;
-      top: number;
-      left: number;
-      size: number;
-      delay: number;
-      color1: string;
-      color2: string;
-    }[]
-  >([]);
-
-  const calculateTimeLeft = useCallback((): TimeLeft => {
-    const now = new Date();
-    const difference = eventDate.getTime() - now.getTime();
-
-    if (difference <= 0) {
-      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    }
-
-    return {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((difference / (1000 * 60)) % 60),
-      seconds: Math.floor((difference / 1000) % 60),
-    };
-  }, [eventDate]);
-
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
   const [inputText, setInputText] = useState("");
   const [aspirations, setAspirations] = useState<Aspiration[]>([]);
 
@@ -60,73 +20,9 @@ const Home = () => {
     }
   };
 
-  const createFireworks = useCallback(() => {
-    const newFireworks = Array.from({ length: 5 }).map((_, i) => ({
-      id: Date.now() + i,
-      size: Math.random() * 50 + 20,
-      top: Math.random() * 100,
-      left: Math.random() * 100,
-      delay: Math.random() * 0.5,
-      color1: [
-        "#ff0000",
-        "#00ff00",
-        "#0000ff",
-        "#ffff00",
-        "#ff00ff",
-        "#00ffff",
-      ][Math.floor(Math.random() * 6)],
-      color2: [
-        "#ff8000",
-        "#80ff00",
-        "#8000ff",
-        "#ff0080",
-        "#00ff80",
-        "#0080ff",
-      ][Math.floor(Math.random() * 6)],
-    }));
-
-    setFireworks((prev) => [...prev, ...newFireworks]);
-
-    // 오래된 폭죽 제거 (메모리 관리를 위해)
-    setTimeout(() => {
-      setFireworks((prev) => prev.filter((fw) => fw.id !== newFireworks[0].id));
-    }, 3000);
-  }, []);
-
   useEffect(() => {
     fetchAspirations();
   }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const newTimeLeft = calculateTimeLeft();
-      setTimeLeft(newTimeLeft);
-
-      if (
-        newTimeLeft.days === 0 &&
-        newTimeLeft.hours === 0 &&
-        newTimeLeft.minutes === 0 &&
-        newTimeLeft.seconds === 0
-      ) {
-        setIsEventStarted(true);
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [calculateTimeLeft]);
-
-  // 이벤트 시작 후 폭죽 생성
-  useEffect(() => {
-    if (isEventStarted) {
-      // 초기 폭죽 즉시 생성
-      createFireworks();
-
-      // 주기적으로 새 폭죽 생성
-      const fireworkInterval = setInterval(createFireworks, 1500);
-
-      return () => clearInterval(fireworkInterval);
-    }
-  }, [isEventStarted, createFireworks]);
 
   const handleSubmit = async () => {
     if (inputText.trim() === "") return;
@@ -148,7 +44,7 @@ const Home = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full min-h-screen overflow-hidden bg-gray-900">
       {/* 풀스크린 비디오 배경 */}
       <video
         autoPlay
@@ -157,439 +53,289 @@ const Home = () => {
         muted
         poster="https://www.crossfit.com/wp-content/uploads/2022/10/15123549/Man-doing-wall-walks-with-community-cheering-1.jpg"
         src="https://www.crossfit.com/wp-content/uploads/2025/01/16143019/2025-homepage-vid-Open.mp4"
-        className="absolute top-0 left-0 w-full h-full object-cover"
+        className="absolute top-0 left-0 w-full h-full object-cover opacity-30"
       ></video>
 
-      {/* 오버레이 – 텍스트 가독성 향상 */}
-      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-40"></div>
-
       {/* 중앙 콘텐츠 영역 */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-4">
-        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4">
-          CROSSFIT 2025 OPEN
+      <div className="relative z-10 flex flex-col items-center pt-12 pb-24 text-white px-4 max-w-7xl mx-auto">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-8 text-center">
+          <span className="inline-block transform hover:scale-105 transition-transform duration-300 bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
+            CROSSFIT 2025 OPEN
+          </span>
         </h1>
-        <p className="text-lg sm:text-xl md:text-2xl mb-8">
-          2025년 2월 28일 시작됩니다!
-        </p>
 
-        {/* 카운트다운 타이머 또는 Let's Go 화면 */}
-        {isEventStarted ? (
-          <div className="relative mt-4 sm:mt-8 mb-6 sm:mb-12 p-2 sm:p-4 rounded-xl overflow-hidden fireworks-container">
-            <style jsx>{`
-              @keyframes explosion {
-                0% {
-                  transform: scale(0);
-                  opacity: 0;
-                }
-                50% {
-                  opacity: 1;
-                }
-                100% {
-                  transform: scale(1.5);
-                  opacity: 0;
-                }
-              }
-
-              @keyframes particle-animation {
-                0% {
-                  transform: translate(0, 0);
-                  opacity: 1;
-                }
-                100% {
-                  transform: translate(var(--tx), var(--ty));
-                  opacity: 0;
-                }
-              }
-
-              @keyframes text-pop {
-                0% {
-                  transform: scale(0.8);
-                  opacity: 0;
-                }
-                50% {
-                  transform: scale(1.2);
-                }
-                100% {
-                  transform: scale(1);
-                  opacity: 1;
-                }
-              }
-
-              .fireworks-container {
-                position: relative;
-                min-height: 120px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                overflow: hidden;
-              }
-
-              .firework {
-                position: absolute;
-                border-radius: 50%;
-                background: radial-gradient(
-                  circle,
-                  var(--color1) 0%,
-                  var(--color2) 100%
-                );
-                animation: explosion 1.5s ease-out forwards;
-                z-index: 5;
-              }
-
-              .particle {
-                position: absolute;
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: var(--color);
-                animation: particle-animation 1s ease-out forwards;
-              }
-
-              .lets-go-text {
-                font-weight: 900;
-                text-align: center;
-                background: linear-gradient(
-                  45deg,
-                  #ff4500,
-                  #ffd700,
-                  #00ff00,
-                  #00ffff,
-                  #0000ff,
-                  #ff00ff,
-                  #ff0000
-                );
-                background-size: 200% auto;
-                color: transparent;
-                background-clip: text;
-                -webkit-background-clip: text;
-                animation: text-power 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67)
-                    infinite,
-                  gradient-animation 2s ease infinite,
-                  text-shake 0.15s ease-in-out infinite;
-                text-shadow: 0 0 20px rgba(255, 255, 255, 0.7),
-                  0 10px 10px rgba(0, 0, 0, 0.5);
-                padding: 10px;
-                z-index: 10;
-                letter-spacing: 1px;
-                transform-origin: center bottom;
-                position: relative;
-              }
-
-              .lets-go-text::before {
-                content: "";
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                height: 6px;
-                background: linear-gradient(90deg, #ff0000, #ffff00);
-                border-radius: 3px;
-                transform: scaleX(0.8);
-                opacity: 0;
-                animation: barbell-appear 0.3s forwards 0.2s,
-                  barbell-pulse 0.8s infinite alternate 0.5s;
-              }
-
-              .lets-go-text::after {
-                content: "💪";
-                position: absolute;
-                right: -15px;
-                top: 0;
-                font-size: 0.7em;
-                animation: muscle-flex 1.2s infinite;
-              }
-
-              @keyframes text-power {
-                0%,
-                100% {
-                  transform: scale(1) translateY(0);
-                }
-                10% {
-                  transform: scale(1.02) translateY(0);
-                }
-                30% {
-                  transform: scale(0.95) translateY(4px);
-                }
-                50% {
-                  transform: scale(1.05) translateY(-2px);
-                }
-                70% {
-                  transform: scale(0.98) translateY(2px);
-                }
-                90% {
-                  transform: scale(1.03) translateY(0);
-                }
-              }
-
-              @keyframes text-shake {
-                0%,
-                100% {
-                  transform: translateX(0) rotate(0deg);
-                }
-                25% {
-                  transform: translateX(-1px) rotate(-0.5deg);
-                }
-                75% {
-                  transform: translateX(1px) rotate(0.5deg);
-                }
-              }
-
-              @keyframes barbell-appear {
-                0% {
-                  transform: scaleX(0.5);
-                  opacity: 0;
-                }
-                100% {
-                  transform: scaleX(1);
-                  opacity: 1;
-                }
-              }
-
-              @keyframes barbell-pulse {
-                0% {
-                  transform: scaleX(0.9) scaleY(1);
-                }
-                100% {
-                  transform: scaleX(1.1) scaleY(1.3);
-                }
-              }
-
-              @keyframes muscle-flex {
-                0%,
-                100% {
-                  transform: rotate(0deg);
-                }
-                25% {
-                  transform: rotate(-15deg) scale(1.1);
-                }
-                50% {
-                  transform: rotate(0deg);
-                }
-                75% {
-                  transform: rotate(15deg) scale(1.1);
-                }
-              }
-
-              @keyframes gradient-animation {
-                0% {
-                  background-position: 0% 50%;
-                }
-                50% {
-                  background-position: 100% 50%;
-                }
-                100% {
-                  background-position: 0% 50%;
-                }
-              }
-            `}</style>
-
-            {/* 폭죽 효과 */}
-            {fireworks.map((firework) => (
-              <div
-                key={firework.id}
-                className="firework"
-                style={
-                  {
-                    "--color1": firework.color1,
-                    "--color2": firework.color2,
-                    width: `${firework.size}px`,
-                    height: `${firework.size}px`,
-                    top: `${firework.top}%`,
-                    left: `${firework.left}%`,
-                    animationDelay: `${firework.delay}s`,
-                  } as React.CSSProperties
-                }
-              >
-                {/* 각 폭죽에서 튀어나가는 입자들 */}
-                {Array.from({ length: 8 }).map((_, i) => {
-                  const angle = (i / 8) * Math.PI * 2;
-                  const distance = Math.random() * 100 + 50;
-                  const tx = Math.cos(angle) * distance;
-                  const ty = Math.sin(angle) * distance;
-
-                  return (
-                    <div
-                      key={i}
-                      className="particle"
-                      style={
-                        {
-                          "--tx": `${tx}px`,
-                          "--ty": `${ty}px`,
-                          "--color": firework.color1,
-                          top: "50%",
-                          left: "50%",
-                          animationDelay: `${firework.delay + 0.1}s`,
-                        } as React.CSSProperties
-                      }
-                    />
-                  );
-                })}
+        {/* 워크아웃 탭 네비게이션 */}
+        <div className="w-full max-w-6xl mb-12">
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <div className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-700 p-1 rounded-lg shadow-lg max-w-md">
+              <div className="bg-gray-900 rounded-md p-4 h-full flex flex-col items-center justify-center">
+                <h2 className="text-3xl font-bold text-white mb-1">25.1</h2>
+                <p className="text-blue-300 text-sm">현재 공개</p>
               </div>
-            ))}
+            </div>
 
-            <h2 className="lets-go-text text-4xl sm:text-5xl md:text-6xl relative z-10">
-              Let's Go!
-            </h2>
-          </div>
-        ) : (
-          <div className="relative mt-4 sm:mt-8 mb-6 sm:mb-12 p-4 sm:p-8 rounded-xl overflow-hidden countdown-container">
-            <style jsx>{`
-              @keyframes spotlight {
-                0%,
-                100% {
-                  background-position: -100% 0%;
-                  opacity: 0.5;
-                }
-                50% {
-                  background-position: 200% 0%;
-                  opacity: 0.9;
-                }
-              }
-
-              @keyframes boxPulse {
-                0%,
-                100% {
-                  transform: scale(1);
-                }
-                50% {
-                  transform: scale(1.05);
-                }
-              }
-
-              @media (min-width: 640px) {
-                @keyframes boxPulse {
-                  0%,
-                  100% {
-                    transform: scale(1);
-                  }
-                  50% {
-                    transform: scale(1.1);
-                  }
-                }
-              }
-
-              @keyframes glow {
-                0%,
-                100% {
-                  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-                }
-                50% {
-                  text-shadow: 0 0 30px rgba(255, 255, 255, 0.9),
-                    0 0 40px rgba(0, 157, 255, 0.8);
-                }
-              }
-
-              @keyframes borderGlow {
-                0%,
-                100% {
-                  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-                }
-                50% {
-                  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
-                    0 0 30px rgba(0, 157, 255, 0.6);
-                }
-              }
-
-              .countdown-container {
-                background: rgba(0, 0, 0, 0.2);
-                box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-              }
-
-              .countdown-container::before {
-                content: "";
-                position: absolute;
-                top: -50%;
-                left: -50%;
-                width: 200%;
-                height: 200%;
-                background: radial-gradient(
-                  circle,
-                  rgba(255, 255, 255, 0.9) 0%,
-                  rgba(255, 255, 255, 0) 50%
-                );
-                animation: spotlight 8s infinite;
-                pointer-events: none;
-                z-index: -1;
-              }
-
-              .countdown-box {
-                backdrop-filter: blur(4px);
-                background: linear-gradient(
-                  145deg,
-                  rgba(0, 0, 0, 0.2),
-                  rgba(50, 50, 100, 0.3)
-                );
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                animation: borderGlow 4s infinite alternate,
-                  boxPulse 4s infinite;
-              }
-
-              .box-days {
-                animation-delay: 0s;
-              }
-
-              .box-hours {
-                animation-delay: 1s;
-              }
-
-              .box-minutes {
-                animation-delay: 2s;
-              }
-
-              .box-seconds {
-                animation-delay: 3s;
-              }
-
-              .countdown-number {
-                animation: glow 3s infinite alternate;
-              }
-            `}</style>
-
-            <div className="flex space-x-2 sm:space-x-4 md:space-x-6 text-center">
-              <div className="countdown-box box-days p-2 sm:p-4 rounded-lg min-w-[60px] sm:min-w-[80px]">
-                <p className="countdown-number text-2xl sm:text-4xl md:text-5xl font-extrabold">
-                  {timeLeft.days}
-                </p>
-                <span className="uppercase text-[10px] sm:text-xs md:text-sm tracking-widest">
-                  일
-                </span>
+            <div className="flex-1 bg-gray-700 p-1 rounded-lg shadow-lg opacity-80 max-w-md">
+              <div className="bg-gray-800 rounded-md p-4 h-full flex flex-col items-center justify-center">
+                <h2 className="text-2xl font-bold text-gray-300 mb-1">25.2</h2>
+                <p className="text-blue-200/70 text-sm">Coming Soon</p>
               </div>
-              <div className="countdown-box box-hours p-2 sm:p-4 rounded-lg min-w-[60px] sm:min-w-[80px]">
-                <p className="countdown-number text-2xl sm:text-4xl md:text-5xl font-extrabold">
-                  {timeLeft.hours}
-                </p>
-                <span className="uppercase text-[10px] sm:text-xs md:text-sm tracking-widest">
-                  시간
-                </span>
-              </div>
-              <div className="countdown-box box-minutes p-2 sm:p-4 rounded-lg min-w-[60px] sm:min-w-[80px]">
-                <p className="countdown-number text-2xl sm:text-4xl md:text-5xl font-extrabold">
-                  {timeLeft.minutes}
-                </p>
-                <span className="uppercase text-[10px] sm:text-xs md:text-sm tracking-widest">
-                  분
-                </span>
-              </div>
-              <div className="countdown-box box-seconds p-2 sm:p-4 rounded-lg min-w-[60px] sm:min-w-[80px]">
-                <p className="countdown-number text-2xl sm:text-4xl md:text-5xl font-extrabold">
-                  {timeLeft.seconds}
-                </p>
-                <span className="uppercase text-[10px] sm:text-xs md:text-sm tracking-widest">
-                  초
-                </span>
+            </div>
+
+            <div className="flex-1 bg-gray-700 p-1 rounded-lg shadow-lg opacity-70 max-w-md">
+              <div className="bg-gray-800 rounded-md p-4 h-full flex flex-col items-center justify-center">
+                <h2 className="text-2xl font-bold text-gray-300 mb-1">25.3</h2>
+                <p className="text-blue-200/70 text-sm">Coming Soon</p>
               </div>
             </div>
           </div>
-        )}
 
-        {/* 포부 작성 textarea 영역 */}
-        <div className="mt-12 w-full max-w-md bg-white/10 backdrop-blur-md p-6 rounded-xl shadow-lg border border-white/20 transition-all duration-300 hover:shadow-xl">
+          {/* 25.1 운동 기준 테이블 */}
+          <div className="bg-gray-800/80 backdrop-blur-md p-6 rounded-xl shadow-xl border border-blue-500/30">
+            {/* 워크아웃 설명 섹션 추가 */}
+            <div className="mb-8">
+              <div className="bg-black/50 border-2 border-yellow-400 rounded-lg p-5 mb-6">
+                <h3 className="text-2xl font-bold text-white mb-3 bg-yellow-400 text-black inline-block px-3 py-1">
+                  WORKOUT 25.1
+                </h3>
+                <div className="text-white">
+                  <p className="font-bold text-xl mb-3">15-minute AMRAP:</p>
+                  <ul className="space-y-2 mb-4">
+                    <li className="flex items-start">
+                      <span className="text-yellow-400 mr-2">•</span>3 lateral
+                      burpees over the dumbbell
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-yellow-400 mr-2">•</span>3 dumbbell
+                      hang clean-to-overheads
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-yellow-400 mr-2">•</span>
+                      30-foot walking lunge{" "}
+                      <span className="text-yellow-400">(2 x 15 feet)</span>
+                    </li>
+                  </ul>
+                  <p className="text-sm mb-4">
+                    *After completing each round, add 3 reps to the burpees and
+                    hang clean-to-overheads.
+                  </p>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    <div className="flex items-center">
+                      <span className="text-yellow-400 mr-2">♀</span> 35-lb
+                      (15-kg) dumbbell
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-yellow-400 mr-2">♂</span> 50-lb
+                      (22.5-kg) dumbbell
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h3 className="text-2xl font-bold mb-6 text-center text-blue-200 border-b border-blue-500/30 pb-3">
+              25.1 운동 기준 (MOVEMENT STANDARDS)
+            </h3>
+
+            {/* 운동 1: Lateral Burpee Over the Dumbbell */}
+            <div className="mb-12">
+              <h4 className="text-xl font-bold mb-4 text-blue-300 flex items-center">
+                <span className="inline-block w-8 h-8 bg-blue-600 rounded-full text-white flex items-center justify-center mr-3">
+                  1
+                </span>
+                Lateral Burpee Over the Dumbbell
+              </h4>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-4">
+                <div className="bg-gray-900/80 rounded-lg p-5 border-l-4 border-green-500">
+                  <h5 className="font-bold text-green-400 mb-3 uppercase text-sm tracking-wider">
+                    요구사항
+                  </h5>
+                  <ul className="space-y-2 text-gray-200">
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>
+                      덤벨의 한쪽에서 시작합니다.
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>
+                      가슴과 허벅지가 각 반복에서 바닥에 닿아야 합니다.
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>
+                      손을 바닥에서 떼고 양발로 돌아옵니다.
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>
+                      덤벨 위로 점프(양발이 지면에서 떨어져야 함)합니다.
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>
+                      양발이 덤벨의 반대쪽에 닿으면 반복이 완료됩니다.
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-gray-900/80 rounded-lg p-5 border-l-4 border-red-500">
+                  <h5 className="font-bold text-red-400 mb-3 uppercase text-sm tracking-wider">
+                    일반적인 No-Reps
+                  </h5>
+                  <ul className="space-y-2 text-gray-200">
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      가슴/허벅지가 바닥에 닿지 않음
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      덤벨을 밟으며 넘어감
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      덤벨 앞이나 뒤로 점프 (위가 아닌)
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      점프 중 덤벨에 닿음
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* 운동 2: Dumbbell Hang Clean-to-Overhead */}
+            <div className="mb-12">
+              <h4 className="text-xl font-bold mb-4 text-blue-300 flex items-center">
+                <span className="inline-block w-8 h-8 bg-blue-600 rounded-full text-white flex items-center justify-center mr-3">
+                  2
+                </span>
+                Dumbbell Hang Clean-to-Overhead
+              </h4>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-4">
+                <div className="bg-gray-900/80 rounded-lg p-5 border-l-4 border-green-500">
+                  <h5 className="font-bold text-green-400 mb-3 uppercase text-sm tracking-wider">
+                    요구사항
+                  </h5>
+                  <ul className="space-y-2 text-gray-200">
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>각 반복 시작
+                      시 덤벨은 팔을 뻗은 상태로 힙 아래에 있어야 합니다.
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>
+                      덤벨을 랙 포지션으로 가져와야 합니다(스내치는 허용되지
+                      않음).
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>랙
+                      포지션에서 오버헤드 방식은 자유롭게 선택 가능합니다.
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>
+                      무릎, 엉덩이, 작업 팔의 팔꿈치가 완전히 펴졌을 때 반복이
+                      완료됩니다.
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-gray-900/80 rounded-lg p-5 border-l-4 border-red-500">
+                  <h5 className="font-bold text-red-400 mb-3 uppercase text-sm tracking-wider">
+                    일반적인 No-Reps
+                  </h5>
+                  <ul className="space-y-2 text-gray-200">
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      들어올릴 때 비작업 손/팔을 몸이나 덤벨에 접촉
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      양손으로 덤벨 들어올리기
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      팔꿈치, 무릎, 엉덩이가 완전히 펴지기 전에 덤벨 내리기
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      완료 시 덤벨이 몸 앞쪽에 위치
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* 운동 3: 30-Foot Walking Lunge */}
+            <div className="mb-4">
+              <h4 className="text-xl font-bold mb-4 text-blue-300 flex items-center">
+                <span className="inline-block w-8 h-8 bg-blue-600 rounded-full text-white flex items-center justify-center mr-3">
+                  3
+                </span>
+                30-Foot Walking Lunge (2x15 feet)
+              </h4>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-4">
+                <div className="bg-gray-900/80 rounded-lg p-5 border-l-4 border-green-500">
+                  <h5 className="font-bold text-green-400 mb-3 uppercase text-sm tracking-wider">
+                    요구사항
+                  </h5>
+                  <ul className="space-y-2 text-gray-200">
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>각 런지
+                      구간은 라인 뒤에 양발이 일렬로 서서 시작합니다.
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>
+                      뒷발 무릎이 바닥에 닿아야 합니다.
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>각 반복에서
+                      무릎과 엉덩이를 펴야 합니다.
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>
+                      양쪽 발 뒤꿈치가 15피트 라인을 완전히 넘었을 때 반복이
+                      완료됩니다.
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2">•</span>
+                      15피트 완료 후 돌아서서 다시 시작 라인으로 런지합니다.
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-gray-900/80 rounded-lg p-5 border-l-4 border-red-500">
+                  <h5 className="font-bold text-red-400 mb-3 uppercase text-sm tracking-wider">
+                    일반적인 No-Reps
+                  </h5>
+                  <ul className="space-y-2 text-gray-200">
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      라인에 발을 걸치고 런지 시작
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      무릎과 엉덩이를 완전히 펴지 않음
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      무릎이 바닥에 닿지 않음
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2">✗</span>
+                      라인에 발이 걸친 채로 끝냄
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 포부 작성 영역 */}
+        <div className="w-full max-w-md bg-white/10 backdrop-blur-md p-6 rounded-xl shadow-lg border border-white/20 transition-all duration-300 hover:shadow-xl">
           <label
             htmlFor="aspirations"
             className="block text-lg font-semibold mb-3 text-blue-100 tracking-wide"
           >
-            Crossfit 2025 Open 각오 한마디 !
+            CrossFit 2025 Open 각오 한마디 !
           </label>
           <div className="flex items-center gap-2">
             <div className="relative flex-grow">
