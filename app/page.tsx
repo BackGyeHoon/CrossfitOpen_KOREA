@@ -7,6 +7,7 @@ import WorkoutDetails from "@/components/WorkoutDetails";
 import ComingSoon from "@/components/ComingSoon";
 import AspirationsInput from "@/components/AspirationsInput";
 import WorkoutTabs from "@/components/WorkoutTabs";
+import "./animations.css";
 
 const Home = () => {
   const [inputText, setInputText] = useState("");
@@ -64,7 +65,7 @@ const Home = () => {
       {/* 콘텐츠 영역 */}
       <div className="relative z-10 flex flex-col items-center pt-12 pb-24 text-white px-4 max-w-7xl mx-auto">
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-8 text-center">
-          <span className="inline-block transform hover:scale-105 transition-transform duration-300 bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
+          <span className="inline-block animate-fadeIn animate-spotlight drop-shadow-[0_2px_8px_rgba(255,165,0,0.5)]">
             CROSSFIT 2025 OPEN
           </span>
         </h1>
