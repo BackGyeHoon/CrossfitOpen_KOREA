@@ -7,6 +7,7 @@ import WorkoutDetails from "@/components/WorkoutDetails";
 import ComingSoon from "@/components/ComingSoon";
 import AspirationsInput from "@/components/AspirationsInput";
 import WorkoutTabs from "@/components/WorkoutTabs";
+import KrLeaderboard from "@/components/KrLeaderboard";
 import "./animations.css";
 
 const Home = () => {
@@ -78,7 +79,7 @@ const Home = () => {
           {activeTab === "25.1" ? (
             <WorkoutDetails />
           ) : activeTab === "kr-leaderboard" ? (
-            <ComingSoon workoutNumber={activeTab} isLeaderboard={true} />
+            <KrLeaderboard />
           ) : (
             <ComingSoon workoutNumber={activeTab} />
           )}
