@@ -5,9 +5,10 @@ export async function GET(request: Request) {
     // URL에서 검색 파라미터 추출
     const { searchParams } = new URL(request.url);
     const division = searchParams.get("division") || "2"; // 기본값은 여성(2)
+    const scaled = searchParams.get("scaled") || "0"; // 기본값은 RX(0)
 
     const response = await fetch(
-      `https://c3po.crossfit.com/api/competitions/v2/competitions/open/2025/leaderboards?view=0&division=${division}&region=0&scaled=0&sort=0`,
+      `https://c3po.crossfit.com/api/competitions/v2/competitions/open/2025/leaderboards?view=0&division=${division}&region=0&scaled=${scaled}&sort=0`,
       {
         headers: {
           "Content-Type": "application/json",
