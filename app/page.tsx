@@ -76,6 +76,8 @@ const Home = () => {
           {/* 탭 콘텐츠 */}
           {activeTab === "25.1" ? (
             <WorkoutDetails />
+          ) : activeTab === "kr-leaderboard" ? (
+            <ComingSoon workoutNumber={activeTab} isLeaderboard={true} />
           ) : (
             <ComingSoon workoutNumber={activeTab} />
           )}

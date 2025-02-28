@@ -29,6 +29,12 @@ const WorkoutTabs: React.FC<WorkoutTabsProps> = ({
         isActive={activeTab === "25.3"}
         onClick={() => onTabChange("25.3")}
       />
+      <TabButton
+        id="🇰🇷 애슬릿 순위"
+        label="🇰🇷 애슬릿 순위"
+        isActive={activeTab === "kr-leaderboard"}
+        onClick={() => onTabChange("kr-leaderboard")}
+      />
     </div>
   );
 };
