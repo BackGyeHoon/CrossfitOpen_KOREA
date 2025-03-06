@@ -4,6 +4,7 @@ import TextMarquee from "@/components/TextMarquee";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Aspiration } from "@/types/aspiration";
 import WorkoutDetails from "@/components/WorkoutDetails";
+import WorkoutDetails25_2 from "@/components/WorkoutDetails25_2";
 import ComingSoon from "@/components/ComingSoon";
 import AspirationsInput from "@/components/AspirationsInput";
 import WorkoutTabs from "@/components/WorkoutTabs";
@@ -78,6 +79,8 @@ const Home = () => {
           {/* 탭 콘텐츠 */}
           {activeTab === "25.1" ? (
             <WorkoutDetails />
+          ) : activeTab === "25.2" ? (
+            <WorkoutDetails25_2 />
           ) : activeTab === "kr-leaderboard" ? (
             <KrLeaderboard />
           ) : (

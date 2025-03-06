@@ -19,7 +19,7 @@ const WorkoutTabs: React.FC<WorkoutTabsProps> = ({
       />
       <TabButton
         id="25.2"
-        label="Coming Soon"
+        label="현재 공개"
         isActive={activeTab === "25.2"}
         onClick={() => onTabChange("25.2")}
       />

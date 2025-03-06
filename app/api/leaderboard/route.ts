@@ -8,11 +8,10 @@ export async function GET(request: Request) {
     const scaled = searchParams.get("scaled") || "0"; // 기본값은 RX(0)
 
     const response = await fetch(
-      `https://c3po.crossfit.com/api/competitions/v2/competitions/open/2025/leaderboards?view=0&division=${division}&region=0&scaled=${scaled}&sort=0`,
+      `https://c3po.crossfit.com/api/leaderboards/v2/competitions/open/2025/leaderboards?view=0&division=${division}&region=28&scaled=${scaled}&sort=0`,
       {
         headers: {
           "Content-Type": "application/json",
-          // 필요한 경우 여기에 인증 헤더나 다른 헤더를 추가할 수 있습니다
         },
       }
     );

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: "CrossFit 2025 Open 워크아웃 정보 및 기준",
     images: [
       {
-        url: "/og-image.jpg", // 이미지 경로 (public 폴더 기준)
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "CrossFit 2025 Open Korean translation",
