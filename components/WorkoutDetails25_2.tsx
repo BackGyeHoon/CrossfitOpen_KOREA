@@ -11,29 +11,49 @@ const WorkoutDetails25_2: React.FC = () => {
             WORKOUT 25.2
           </h3>
           <div className="text-white">
-            <p className="font-bold text-xl mb-3">12-minute AMRAP:</p>
+            <p className="font-bold text-xl mb-3">For time (22.3 repeat):</p>
             <ul className="space-y-2 mb-4">
               <li className="flex items-start">
-                <span className="text-yellow-400 mr-2">•</span>3 bar muscle-ups
+                <span className="text-yellow-400 mr-2">•</span>21 pull-ups
               </li>
               <li className="flex items-start">
-                <span className="text-yellow-400 mr-2">•</span>6 thrusters
+                <span className="text-yellow-400 mr-2">•</span>42 double-unders
+              </li>
+              <li className="flex items-start">
+                <span className="text-yellow-400 mr-2">•</span>21 thrusters
+                (weight 1)
+              </li>
+              <li className="flex items-start">
+                <span className="text-yellow-400 mr-2">•</span>18 chest-to-bar
+                pull-ups
+              </li>
+              <li className="flex items-start">
+                <span className="text-yellow-400 mr-2">•</span>36 double-unders
+              </li>
+              <li className="flex items-start">
+                <span className="text-yellow-400 mr-2">•</span>18 thrusters
+                (weight 2)
+              </li>
+              <li className="flex items-start">
+                <span className="text-yellow-400 mr-2">•</span>15 bar muscle-ups
               </li>
               <li className="flex items-start">
                 <span className="text-yellow-400 mr-2">•</span>30 double-unders
               </li>
+              <li className="flex items-start">
+                <span className="text-yellow-400 mr-2">•</span>15 thrusters
+                (weight 3)
+              </li>
             </ul>
-            <p className="text-sm mb-4">
-              *추가 라운드마다 bar muscle-ups과 thrusters가 3과 6씩 증가합니다
-            </p>
-            <div className="grid grid-cols-2 gap-4 mt-2">
+            <p className="text-sm mb-4">Time cap: 12 minutes</p>
+            <div className="grid grid-cols-1 gap-4 mt-2">
               <div className="flex items-center">
-                <span className="text-yellow-400 mr-2">♀</span> 85-lb (38-kg)
-                바벨
+                <span className="text-yellow-400 mr-2">♀</span> 65, 75, 85 lb
+                (29, 34, 38 kg)
               </div>
               <div className="flex items-center">
-                <span className="text-yellow-400 mr-2">♂</span> 115-lb (52-kg)
-                바벨
+                <span className="text-yellow-400 mr-2">♂</span> 95, 115, 135 lb
+                (43, 52, 61 kg)
               </div>
             </div>
           </div>
@@ -67,6 +87,33 @@ const WorkoutDetails25_2: React.FC = () => {
       {/* 운동 기준 컴포넌트들 */}
       <ExerciseStandard
         number={1}
+        title="Pull-Up"
+        requirements={[
+          "팔을 완전히 펴고 발이 바닥에서 떨어진 상태로 각 반복을 시작합니다.",
+          "턱이 바의 수평선을 명확히 넘을 때 반복이 인정됩니다.",
+        ]}
+        noReps={[
+          "팔을 완전히 펴지 않고 반복 시작",
+          "턱이 바의 수평선을 넘지 않음",
+        ]}
+      />
+
+      <ExerciseStandard
+        number={2}
+        title="Chest-to-Bar Pull-Up"
+        requirements={[
+          "팔을 완전히 펴고 발이 바닥에서 떨어진 상태로 각 반복을 시작합니다.",
+          "가슴이 쇄골 높이 또는 그 아래에서 바에 닿을 때 반복이 인정됩니다.",
+        ]}
+        noReps={[
+          "팔을 완전히 펴지 않고 반복 시작",
+          "가슴이 바에 닿지 않음",
+          "쇄골 아래로 바에 접촉하지 않음",
+        ]}
+      />
+
+      <ExerciseStandard
+        number={3}
         title="Bar Muscle-Up"
         requirements={[
           "팔을 완전히 펴고 발이 바닥에서 떨어진 상태로 각 반복을 시작합니다.",
@@ -84,7 +131,7 @@ const WorkoutDetails25_2: React.FC = () => {
       />
 
       <ExerciseStandard
-        number={2}
+        number={4}
         title="Thruster"
         requirements={[
           "하단 위치에서 고관절의 접히는 부분이 무릎 상단 아래로 명확하게 내려가야 합니다.",
@@ -99,7 +146,7 @@ const WorkoutDetails25_2: React.FC = () => {
       />
 
       <ExerciseStandard
-        number={3}
+        number={5}
         title="Double-Under"
         requirements={[
           "한 번의 점프 동안 줄이 발 아래로 두 번 통과해야 합니다.",
@@ -109,22 +156,6 @@ const WorkoutDetails25_2: React.FC = () => {
         noReps={[
           "성공적인 반복 대신 시도만 카운트하는 경우",
           "줄을 뒤로 회전시키는 경우",
-        ]}
-      />
-
-      <ExerciseStandard
-        number={4}
-        title="스케일 옵션 - Jumping Pull-Up/Chest-to-Bar"
-        requirements={[
-          "바는 운동선수가 똑바로 섰을 때 머리 위로 최소 6인치(15cm) 위에 있어야 합니다.",
-          "각 반복 시작 시 팔을 완전히 펴야 합니다.",
-          "점프 풀업: 턱이 바의 수평선을 명확히 넘을 때 반복이 인정됩니다.",
-          "점프 체스트투바: 가슴이 쇄골 높이 또는 그 아래에서 바에 닿을 때 반복이 인정됩니다.",
-        ]}
-        noReps={[
-          "팔을 완전히 펴지 않고 반복 시작",
-          "점프 풀업: 턱이 바의 수평선을 넘지 않음",
-          "점프 체스트투바: 쇄골 아래로 바에 접촉하지 않음",
         ]}
       />
     </div>
