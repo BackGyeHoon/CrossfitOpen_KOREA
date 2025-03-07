@@ -121,6 +121,9 @@ const KrLeaderboard: React.FC = () => {
       <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center">
         🇰🇷 CrossFit 오픈 2025 한국 선수 리더보드
       </h2>
+      <p className="text-sm font-bold mb-4 sm:mb-6 text-center">
+        하단의 순위는 아시아 순위 기준 입니다.
+      </p>
 
       {/* 성별 선택 탭과 카테고리 선택을 가로로 배치 */}
       <div className="flex flex-wrap justify-center items-center gap-4 mb-6">
