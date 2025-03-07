@@ -71,7 +71,6 @@ const WorkoutDetails25_2: React.FC = () => {
         <ul className="space-y-2 mb-4">
           <li className="flex items-start">
             <span className="text-green-400 mr-2">•</span>21 jumping pull-ups
-            또는 ring rows
           </li>
           <li className="flex items-start">
             <span className="text-green-400 mr-2">•</span>42 single-unders
@@ -82,7 +81,6 @@ const WorkoutDetails25_2: React.FC = () => {
           </li>
           <li className="flex items-start">
             <span className="text-green-400 mr-2">•</span>18 jumping pull-ups
-            또는 ring rows
           </li>
           <li className="flex items-start">
             <span className="text-green-400 mr-2">•</span>36 single-unders
@@ -122,17 +120,15 @@ const WorkoutDetails25_2: React.FC = () => {
     pullup: (
       <ExerciseStandard
         number={1}
-        title="Jumping Pull-Up / Ring Row"
+        title="Jumping Pull-Up"
         requirements={[
           "Jumping Pull-Up: 상자 위에 서서 팔을 뻗어 바를 잡고 시작합니다.",
           "다리를 이용해 약간 점프하여 턱을 바 위로 올린 다음 천천히 시작 위치로 돌아갑니다.",
-          "Ring Row: 링을 잡고 발을 바닥에 두고 몸을 45도 각도로 기울입니다.",
           "팔을 펴고 시작하여 가슴을 링 높이까지 당긴 후 다시 내려옵니다.",
         ]}
         noReps={[
           "바를 잡기 위해 과도한 점프 사용",
           "턱이 바 위로 올라가지 않음",
-          "Ring Row에서 몸이 충분히 내려가지 않음",
         ]}
       />
     ),
