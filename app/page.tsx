@@ -9,6 +9,7 @@ import ComingSoon from "@/components/ComingSoon";
 import AspirationsInput from "@/components/AspirationsInput";
 import WorkoutTabs from "@/components/WorkoutTabs";
 import KrLeaderboard from "@/components/KrLeaderboard";
+import WorkoutDetails25_3 from "@/components/WorkoutDetails25_3";
 import "./animations.css";
 
 const Home = () => {
@@ -81,6 +82,8 @@ const Home = () => {
             <WorkoutDetails />
           ) : activeTab === "25.2" ? (
             <WorkoutDetails25_2 />
+          ) : activeTab === "25.3" ? (
+            <WorkoutDetails25_3 />
           ) : activeTab === "kr-leaderboard" ? (
             <KrLeaderboard />
           ) : (
